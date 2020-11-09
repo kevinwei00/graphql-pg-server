@@ -1,0 +1,28 @@
+{
+  "name": "graphql-pg-server",
+  "version": "0.1.0",
+  "description": "Backend service, powered by Apollo GraphQL and PostgreSQL",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "migrate": "postgrator --config postgrator-config.js",
+    "seed": "psql -U postgres -f ./seeds/seed.sql -d postgres"
+  },
+  "author": "Kevin Wei",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "postgrator-cli": "^4.0.0"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^15.4.0",
+    "graphql-postgres-subscriptions": "^1.0.5",
+    "graphql-ws": "^1.11.0",
+    "pg": "^8.4.2"
+  }
+}
