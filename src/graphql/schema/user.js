@@ -8,7 +8,7 @@ module.exports = gql`
 
   type User {
     id: ID!
-    username: String!
+    user_name: String!
     messages: [Message!]
   }
 `;

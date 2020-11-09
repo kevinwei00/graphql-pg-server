@@ -27,13 +27,11 @@ module.exports = {
           text: `SELECT * FROM messages WHERE id = $1`,
           values: [id]
         });
-        if (result.rows && result.rowCount > 0) {
-          return result.rows.map(message => {
-            return {
-              id: message.id,
-              text: message.text
-            }
-          })
+        if (result.rows[0]) {
+          return {
+            id: result.rows[0].id,
+            text: result.rows[0].text
+          }
         }
         else {
           return null;
@@ -96,17 +94,18 @@ module.exports = {
   Message: {
     user: async (message, _, { db }) => {
       try {
-        const query = {
-          text: `SELECT * FROM users WHERE id = $1`,
-          values: [message.user_id]
-        }
-        const result = await db.query(query);
-
+        const result = await db.query({
+          text: `SELECT * FROM users
+                 JOIN users_messages ON users.id = users_messages.user_id
+                 JOIN messages ON users_messages.message_id = messages.id
+                 WHERE message_id = $1`,
+          values: [message.id]
+        });
         if (result.rows && result.rowCount > 0) {
           return result.rows.map(user => {
             return {
               id: user.id,
-              username: user.username,
+              user_name: user.user_name,
             }
           })
         }
