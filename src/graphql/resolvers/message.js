@@ -95,19 +95,17 @@ module.exports = {
     user: async (message, _, { db }) => {
       try {
         const result = await db.query({
-          text: `SELECT * FROM users
+          text: `SELECT user_id, user_name FROM users
                  JOIN users_messages ON users.id = users_messages.user_id
                  JOIN messages ON users_messages.message_id = messages.id
                  WHERE message_id = $1`,
           values: [message.id]
         });
-        if (result.rows && result.rowCount > 0) {
-          return result.rows.map(user => {
-            return {
-              id: user.id,
-              user_name: user.user_name,
-            }
-          })
+        if (result.rows[0]) {
+          return {
+            id: result.rows[0].user_id,
+            user_name: result.rows[0].user_name
+          }
         }
         else {
           return null;
