@@ -43,8 +43,9 @@ module.exports = {
   },
 
   Mutation: {
-    createMessage: async (_, { text }, { db }) => {
+    createMessage: async (_, { input }, { db }) => {
       // connect a single client for transactional integrity
+      const { text, user_id } = input;
       const client = await db.pool.connect();
       try {
         await client.query('BEGIN');
@@ -55,7 +56,7 @@ module.exports = {
         const id = result.rows[0].id;
         await client.query({
           text: `INSERT INTO users_messages(user_id, message_id) VALUES($1, $2)`,
-          values: ['b8f2c19d-b1e4-4b57-adeb-c4236d5c197e', id]
+          values: [user_id, id]
         });
         await client.query('COMMIT');
         return { id, text };
